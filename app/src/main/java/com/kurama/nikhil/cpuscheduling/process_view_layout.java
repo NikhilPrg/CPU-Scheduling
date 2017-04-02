@@ -54,7 +54,11 @@ public class process_view_layout extends RelativeLayout{
 
         pro.setText(process);
 
-        tim.setText(Integer.toString(time));
+        if(time > 1) {
+            tim.setText(Integer.toString(time));
+        } else {
+            tim.setText("Done");
+        }
 
         super.setBackgroundResource(R.drawable.square);
     }

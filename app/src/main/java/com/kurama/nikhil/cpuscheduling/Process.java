@@ -8,12 +8,21 @@ public class Process {
     private int burstTime;
     private int originalBurstTime;
     private int arrivalTime;
+    private int idNum;
 
     public Process(String name, int bustTime, int arrivalTime) {
         this.name = name;
         this.burstTime = bustTime;
         this.originalBurstTime = burstTime;
         this.arrivalTime = arrivalTime;
+    }
+
+    public int getIdNum() {
+        return idNum;
+    }
+
+    public void setIdNum(int idNum) {
+        this.idNum = idNum;
     }
 
     public String getName() {

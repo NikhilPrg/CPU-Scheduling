@@ -17,15 +17,19 @@ import java.util.ArrayList;
     NOTES :
     Process View IDS start from 1000, 1001 and so on..
 
+    BUGS:
+    When start running last element not getting updated, even adding while running is causing bugs in update of view
+
     DONE:
     Implemented Main Clock
     Implemented Compound View process_view_layout
     Implemented Class Process
     Implemented ArrayList to store Process
     Implemented Function to display different processes
+    Limit number of entries based on screen size -> Implemented scrolling view instead
+
 
     TO DO:
-    Limit number of entries based on screen size
     Write functions to determine 'runningProcess' after each second to change its value
     Write various algorithms to detemine which process will run
     Cleanup UI
@@ -58,7 +62,8 @@ public class MainActivity extends Activity {
             for (int i = 0; i < processesList.size(); i++) {
                 try {
                     Process p = processesList.get(i);
-                    process_view_layout current = (process_view_layout) findViewById(1001 + i);
+                    p.subTime();
+                    process_view_layout current = (process_view_layout) findViewById(p.getIdNum());
                     current.subTime();
                 }catch (Exception e) {
                     Log.v("myapp", "Err");
@@ -73,13 +78,13 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         timerTextView = (TextView) findViewById(R.id.timer_tv);
-        getWindow().getDecorView().setSystemUiVisibility(
-                View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                        | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                        | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                        | View.SYSTEM_UI_FLAG_FULLSCREEN
-                        | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
+//        getWindow().getDecorView().setSystemUiVisibility(
+//                View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+//                        | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+//                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+//                        | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+//                        | View.SYSTEM_UI_FLAG_FULLSCREEN
+//                        | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
         Button b = (Button) findViewById(R.id.button);
         b.setText("start");
         b.setOnClickListener(new View.OnClickListener() {
@@ -93,6 +98,7 @@ public class MainActivity extends Activity {
                 } else {
                     startTime = System.currentTimeMillis();
                     timerHandler.postDelayed(timerRunnable, 0);
+
                     b.setText("stop");
                 }
             }
@@ -156,6 +162,7 @@ public class MainActivity extends Activity {
                 tempP.setLayoutParams(params);
                 tempP.setProcessNameAndTime(p.getName(),p.getBurstTime());
                 tempP.setId(1000+k);
+                p.setIdNum(tempP.getId());
                 Log.v("myapp", Integer.toString(tempP.getId()));
                 innerLayout.addView(tempP);
             }
@@ -167,6 +174,7 @@ public class MainActivity extends Activity {
         innerLayout.setOrientation(LinearLayout.HORIZONTAL);
         for(int i = 0; i < processesInLastRow; i++) {
             Process p = processesList.get(k);
+
             k++;
             process_view_layout tempP = new process_view_layout(this);
             tempP.setMinimumHeight(100);
@@ -182,6 +190,13 @@ public class MainActivity extends Activity {
     public void onResume() {
         super.onResume();
         createProcessViews();
+//        getWindow().getDecorView().setSystemUiVisibility(
+//                View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+//                        | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+//                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+//                        | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+//                        | View.SYSTEM_UI_FLAG_FULLSCREEN
+//                        | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
     }
 
     public void add(View view) {
