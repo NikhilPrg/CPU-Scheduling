@@ -7,6 +7,7 @@ public class Process {
     private String name;
     private int burstTime;
     private int originalBurstTime;
+    private int OriginalArrivalTime;
     private int arrivalTime;
     private int idNum;
 
@@ -15,6 +16,7 @@ public class Process {
         this.burstTime = bustTime;
         this.originalBurstTime = burstTime;
         this.arrivalTime = arrivalTime;
+        this.OriginalArrivalTime = arrivalTime;
     }
 
     public int getIdNum() {
@@ -29,8 +31,12 @@ public class Process {
         return name;
     }
 
-    public void subTime() {
+    public void subBurstTime(){
         burstTime--;
+    }
+
+    public void subArrivalTime() {
+        arrivalTime--;
     }
     public int getBurstTime() {
         return burstTime;

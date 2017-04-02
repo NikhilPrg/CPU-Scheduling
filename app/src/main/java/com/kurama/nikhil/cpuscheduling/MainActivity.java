@@ -12,6 +12,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.Stack;
 
 /*
     NOTES :
@@ -27,7 +29,7 @@ import java.util.ArrayList;
     Implemented ArrayList to store Process
     Implemented Function to display different processes
     Limit number of entries based on screen size -> Implemented scrolling view instead
-
+    FCFS Semi Implemented
 
     TO DO:
     Write functions to determine 'runningProcess' after each second to change its value
@@ -45,7 +47,7 @@ public class MainActivity extends Activity {
     TextView timerTextView;
     long startTime = 0;
     ArrayList<Process> processesList;
-
+    Process running;
     //runs without a timer by reposting this handler at the end of the runnable
     Handler timerHandler = new Handler();
     Runnable timerRunnable = new Runnable() {
@@ -56,15 +58,20 @@ public class MainActivity extends Activity {
             int seconds = (int) (millis / 1000);
             int minutes = seconds / 60;
             seconds = seconds % 60;
-
+            firstComeFirstServe();
+            try {
+                running.subBurstTime();
+                process_view_layout r = (process_view_layout) findViewById(running.getIdNum());
+                r.setBackgroundResource(R.drawable.grey);
+            }catch (Exception e){
+                Log.v("queueExp", "Err");
+            }
             timerTextView.setText(String.format("%02d:%02d", minutes, seconds));
 
             for (int i = 0; i < processesList.size(); i++) {
                 try {
                     Process p = processesList.get(i);
-                    p.subTime();
-                    process_view_layout current = (process_view_layout) findViewById(p.getIdNum());
-                    current.subTime();
+                    p.subArrivalTime();
                 }catch (Exception e) {
                     Log.v("myapp", "Err");
                 }
@@ -203,5 +210,25 @@ public class MainActivity extends Activity {
         String processName = Integer.toString(processesList.size());
         processesList.add(new Process("P" + processName, 6, 1));
         createProcessViews();
+    }
+
+
+    LinkedList<Process> firstComeQueue = new LinkedList<Process>();
+    public void firstComeFirstServe() {
+        for (int i = 0; i < processesList.size(); i++) {
+            if(processesList.get(i).getArrivalTime() == 0) {
+                firstComeQueue.add(processesList.get(i));
+            }
+        }
+
+        try {
+            running = firstComeQueue.peek();
+
+            if (running.getBurstTime() <= 1) {
+                firstComeQueue.pop();
+            }
+        }catch (Exception e){
+            Log.v("queueExp", "Empty");
+        }
     }
 }
