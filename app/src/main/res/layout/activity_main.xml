@@ -7,38 +7,53 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.kurama.nikhil.cpuscheduling.MainActivity"
-    >
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/timer_tv"
-        android:textSize="50dp"
-        android:layout_centerHorizontal="true"/>
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/button"
-        android:gravity="end"
-        android:textAlignment="center"
-        android:text="Start Clock"
-        android:layout_centerHorizontal="true"
-        android:layout_alignParentBottom="true"/>
-
+    tools:context="com.kurama.nikhil.cpuscheduling.MainActivity">
     <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/linerLayout1"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:orientation="vertical"
-        android:layout_below="@id/timer_tv"
-        android:layout_centerHorizontal="true">
+        android:gravity="center_horizontal">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="0sp"
+            android:layout_weight=".15"
+            android:id="@+id/timer_tv"
+            android:text="00:00"
+            android:textSize="50sp"
+            android:gravity="center_horizontal"
+            />
 
+        <ScrollView
+            android:layout_width="wrap_content"
+            android:layout_height="0sp"
+            android:layout_weight=".7">
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/linerLayout1"
+                android:orientation="vertical"
+                android:gravity="center_horizontal">
+            </LinearLayout>
+        </ScrollView>
+
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="0sp"
+            android:layout_weight=".075"
+            android:gravity="center_horizontal"
+            android:onClick="add"
+            android:text="add"/>
+
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="0sp"
+            android:layout_weight=".075"
+            android:id="@+id/button"
+            android:gravity="center_horizontal"
+            android:textAlignment="center"
+            android:text="Start Clock"/>
     </LinearLayout>
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@id/button"
-        android:onClick="add"
-        android:text="add"/>
+
 </RelativeLayout>

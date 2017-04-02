@@ -66,7 +66,7 @@ public class process_view_layout extends RelativeLayout{
     }
 
     public void subTime() {
-        if(time > 0) {
+        if(time > 1) {
             time--;
             TextView tim = (TextView) findViewById(R.id.temp_textViewTime);
             tim.setText(Integer.toString(time));

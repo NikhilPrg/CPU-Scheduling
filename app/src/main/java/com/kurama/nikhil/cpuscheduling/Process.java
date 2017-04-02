@@ -6,11 +6,13 @@ package com.kurama.nikhil.cpuscheduling;
 public class Process {
     private String name;
     private int burstTime;
+    private int originalBurstTime;
     private int arrivalTime;
 
     public Process(String name, int bustTime, int arrivalTime) {
         this.name = name;
         this.burstTime = bustTime;
+        this.originalBurstTime = burstTime;
         this.arrivalTime = arrivalTime;
     }
 
@@ -18,6 +20,9 @@ public class Process {
         return name;
     }
 
+    public void subTime() {
+        burstTime--;
+    }
     public int getBurstTime() {
         return burstTime;
     }

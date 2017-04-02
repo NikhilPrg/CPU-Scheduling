@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.Display;
 import android.view.View;
 import android.widget.Button;
@@ -52,7 +53,17 @@ public class MainActivity extends Activity {
             int minutes = seconds / 60;
             seconds = seconds % 60;
 
-            timerTextView.setText(String.format("%d:%02d", minutes, seconds));
+            timerTextView.setText(String.format("%02d:%02d", minutes, seconds));
+
+            for (int i = 0; i < processesList.size(); i++) {
+                try {
+                    Process p = processesList.get(i);
+                    process_view_layout current = (process_view_layout) findViewById(1001 + i);
+                    current.subTime();
+                }catch (Exception e) {
+                    Log.v("myapp", "Err");
+                }
+            }
             timerHandler.postDelayed(this, 1000);
         }
     };
@@ -61,9 +72,14 @@ public class MainActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         timerTextView = (TextView) findViewById(R.id.timer_tv);
-
+        getWindow().getDecorView().setSystemUiVisibility(
+                View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                        | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                        | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                        | View.SYSTEM_UI_FLAG_FULLSCREEN
+                        | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
         Button b = (Button) findViewById(R.id.button);
         b.setText("start");
         b.setOnClickListener(new View.OnClickListener() {
@@ -104,7 +120,6 @@ public class MainActivity extends Activity {
         processesList.add(new Process("P6", 3 , 4));
         processesList.add(new Process("P7", 5 , 6));
         processesList.add(new Process("P8", 2 , 2));
-
     }
 
     public void createProcessViews(){
@@ -113,6 +128,7 @@ public class MainActivity extends Activity {
         Point size = new Point();
         display.getSize(size);
         int width = size.x;
+
         int processesPerRow = width/300;
         int total = processesList.size();
         int y = total/processesPerRow;
@@ -122,6 +138,7 @@ public class MainActivity extends Activity {
         final LinearLayout outerLayout = (LinearLayout) findViewById(R.id.linerLayout1);
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(300,300);
         params.setMargins(5,5,5,5);
+
         //Deleting previous entries
         if(outerLayout.getChildCount() > 0) {
             outerLayout.removeAllViews();
@@ -139,10 +156,12 @@ public class MainActivity extends Activity {
                 tempP.setLayoutParams(params);
                 tempP.setProcessNameAndTime(p.getName(),p.getBurstTime());
                 tempP.setId(1000+k);
+                Log.v("myapp", Integer.toString(tempP.getId()));
                 innerLayout.addView(tempP);
             }
             outerLayout.addView(innerLayout);
         }
+
         //Last Row
         LinearLayout innerLayout = (LinearLayout)new LinearLayout(this);
         innerLayout.setOrientation(LinearLayout.HORIZONTAL);
@@ -159,9 +178,15 @@ public class MainActivity extends Activity {
         outerLayout.addView(innerLayout);
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        createProcessViews();
+    }
 
     public void add(View view) {
-        processesList.add(new Process("P9", 69, 10));
+        String processName = Integer.toString(processesList.size());
+        processesList.add(new Process("P" + processName, 6, 1));
         createProcessViews();
     }
 }
